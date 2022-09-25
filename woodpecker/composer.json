@@ -1,0 +1,22 @@
+{
+    "name": "smartsupp/woodpecker",
+    "description": "PHP SDK for Woodpecker REST API",
+    "keywords": ["woodpecker", "php", "api"],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.5.9",
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Petr Poupě",
+            "email": "pp@smartsupp.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "Smartsupp\\Woodpecker\\": "src/Smartsupp/Woodpecker"
+        }
+    }
+}

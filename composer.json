@@ -1,0 +1,19 @@
+{
+  "name": "vladimirfr/modx-lead-magnet",
+  "type": "project",
+  "minimum-stability": "dev",
+  "require": {
+    "pipedrive/pipedrive": "dev-master",
+    "smartsupp/woodpecker": "dev-master"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "woodpecker",
+      "canonical": false,
+      "options": {
+        "symlink": false
+      }
+    }
+  ]
+}
