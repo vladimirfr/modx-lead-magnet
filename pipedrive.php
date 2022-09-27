@@ -5,7 +5,7 @@
  * string $pipedrivePipelineId
  * string $pipedriveStageId
  * string $pipedriveCompanyKey
- * string $staticData - format: key==value||key==value...
+ * string $pipedriveStaticData - format: key==value||key==value...
  */
 
 if (!$hook) {
@@ -28,8 +28,6 @@ try {
     $email = $hook->getValue('email');
     $company = (string)$hook->getValue('company');
 
-    $personFields = $client->getPersonFields();
-
     $person = null;
 
     $collect = [
@@ -46,7 +44,7 @@ try {
 
     if ($person === null) {
         $companyKey = (isset($pipedriveCompanyKey) && !empty($pipedriveCompanyKey)) ? $pipedriveCompanyKey : 'd6b1c5c53f262bdc1925a78c224122bed18295c3';
-        if (isset($pipedriveStaticData) && !empty($pipedriveStaticData)) {
+        if (isset($pipedriveStaticData)) {
             $staticData = [];
             foreach (explode('||', (string)$pipedriveStaticData) as $item) {
                 $parts = explode('==', $item, 2);
@@ -88,18 +86,20 @@ try {
         }
     }
 
-    $pipeline_id = (isset($pipedrivePipelineId) && !empty($pipedrivePipelineId)) ? $pipedrivePipelineId : 9; //CW - Inbound - Ebook pipeline
-    $stage_id = (isset($pipedriveStageId) && !empty($pipedriveStageId)) ? $pipedriveStageId : 47; //Downloaded ebook
+    $pipeline_id = $pipedrivePipelineId ?? 9; //CW - Inbound - Ebook pipeline
+    $stage_id = $pipedriveStageId ?? 47; //Downloaded ebook
 
-    $deals = $client->getDeals();
-    $body = [
-        'title' => $name,
-        'pipeline_id' => $pipeline_id,
-        'stage_id' => $stage_id,
-        'person_id' => $person->id,
-    ];
+    if (is_numeric($pipeline_id) && is_numeric($stage_id)) {
+        $deals = $client->getDeals();
+        $body = [
+            'title' => empty($name) ? $email : $name,
+            'pipeline_id' => $pipeline_id,
+            'stage_id' => $stage_id,
+            'person_id' => $person->id,
+        ];
 
-    $response = $deals->addADeal($body);
+        $response = $deals->addADeal($body);
+    }
 } catch (\Exception $e) {
     if ($modx) {
         $modx->log(modX::LOG_LEVEL_ERROR, 'Pipedrive: ' . $e->getMessage());
