@@ -6,6 +6,14 @@ Integration with Pipedrive and Woodpecker
 
 `composer i && php pack.php`
 
+`pipedrive-woodpecker.phar` - should be placed in root directory.
+
+#### Snippets:
+
+ - pipedrive.php - add people to pipedrive
+ - woodpecker.php - add people to woodpecker
+ - pipedrivePersonValidator.php - check if person already subscribed to specific deal and stage
+
 #### Woodpecker
 Fork from https://github.com/smartlook/woodpecker
 

@@ -91,8 +91,13 @@ try {
 
     if (is_numeric($pipeline_id) && is_numeric($stage_id)) {
         $deals = $client->getDeals();
+        $title = $email;
+        if (!empty($name)) {
+            $title = sprintf('%s - %s', $name, $email);
+        }
+
         $body = [
-            'title' => empty($name) ? $email : $name,
+            'title' => $title,
             'pipeline_id' => $pipeline_id,
             'stage_id' => $stage_id,
             'person_id' => $person->id,
