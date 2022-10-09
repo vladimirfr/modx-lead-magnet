@@ -42,20 +42,20 @@ try {
         }
     }
 
-    if ($person === null) {
-        $companyKey = (isset($pipedriveCompanyKey) && !empty($pipedriveCompanyKey)) ? $pipedriveCompanyKey : 'd6b1c5c53f262bdc1925a78c224122bed18295c3';
-        if (isset($pipedriveStaticData)) {
-            $staticData = [];
-            foreach (explode('||', (string)$pipedriveStaticData) as $item) {
-                $parts = explode('==', $item, 2);
-                $staticData[$parts[0]] = $parts[1] ?? '';
-            }
-        } else {
-            $staticData = [
-                'e36557534ea092f51d65845a9c008c92a96c152a' => 2086, // Downloaded ebook => Yes
-            ];
+    $companyKey = (isset($pipedriveCompanyKey) && !empty($pipedriveCompanyKey)) ? $pipedriveCompanyKey : 'd6b1c5c53f262bdc1925a78c224122bed18295c3';
+    if (isset($pipedriveStaticData)) {
+        $staticData = [];
+        foreach (explode('||', (string)$pipedriveStaticData) as $item) {
+            $parts = explode('==', $item, 2);
+            $staticData[$parts[0]] = $parts[1] ?? '';
         }
+    } else {
+        $staticData = [
+            'e36557534ea092f51d65845a9c008c92a96c152a' => 2086, // Downloaded ebook => Yes
+        ];
+    }
 
+    if ($person === null) {
         $body = [
             'name' => $name,
             'first_name' => $name,
@@ -84,6 +84,17 @@ try {
         if ($person === null) {
             return true;
         }
+    } elseif ($company || !empty($staticData)) {
+        $body = [
+            'id' => $person->id,
+        ];
+
+        if ($company) {
+            $body[$companyKey] = $company; //Associated company
+        }
+
+        $body = array_merge($body, $staticData);
+        $response = $persons->updateAPerson($body);
     }
 
     $pipeline_id = $pipedrivePipelineId ?? 9; //CW - Inbound - Ebook pipeline
